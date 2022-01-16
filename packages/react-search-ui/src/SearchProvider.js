@@ -47,6 +47,12 @@ const SearchProvider = ({ children, config = {}, driver }) => {
     }
   }, [config.autocompleteQuery]);
 
+  useEffect(() => {
+    if (driverInstance) {
+      driverInstance.setTrackUrlState(config.trackUrlState);
+    }
+  }, [config.trackUrlState]);
+
   // Since driver is initialized in useEffect above, we are waiting
   // to render until the driver is available.
   if (!driverInstance) return null;
