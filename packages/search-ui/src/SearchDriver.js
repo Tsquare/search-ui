@@ -437,6 +437,13 @@ export default class SearchDriver {
   }
 
   /**
+   * @param boolean trackUrlState
+   */
+  setTrackUrlState(trackUrlState) {
+    this.trackUrlState = trackUrlState;
+  }
+
+  /**
    * Any time state is updated in this Driver, the provided callback
    * will be executed with the updated state.
    *
