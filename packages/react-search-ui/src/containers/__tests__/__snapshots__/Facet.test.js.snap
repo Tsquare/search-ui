@@ -2,6 +2,24 @@
 
 exports[`renders correctly 1`] = `
 <View
+  addFilter={[MockFunction]}
+  defaultOptions={Array []}
+  facetCountMap={
+    Object {
+      "all": Object {
+        "field1value1": 20,
+        "field1value2": 10,
+      },
+      "any": Object {
+        "field1value1": 20,
+        "field1value2": 10,
+      },
+      "none": Object {
+        "field1value1": 20,
+        "field1value2": 10,
+      },
+    }
+  }
   label="Field 1"
   onChange={[Function]}
   onMoreClick={[Function]}
@@ -22,7 +40,26 @@ exports[`renders correctly 1`] = `
       },
     ]
   }
-  searchPlaceholder="Filter field1"
+  removeFilter={[MockFunction]}
+  searchPlaceholder="Filter Field 1"
+  searchTerm=""
+  selectedMap={
+    Object {
+      "all": Object {
+        "field1value1": true,
+        "field1value2": false,
+      },
+      "any": Object {
+        "field1value1": false,
+        "field1value2": false,
+      },
+      "none": Object {
+        "field1value1": false,
+        "field1value2": false,
+      },
+    }
+  }
+  setFilter={[MockFunction]}
   showMore={false}
   showSearch={false}
   values={

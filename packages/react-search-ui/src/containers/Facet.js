@@ -17,6 +17,11 @@ export class FacetContainer extends Component {
     field: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     filterType: FilterType,
+    defaultOptions: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.arrayOf(PropTypes.string)
+    ]),
+    showDefaultOptionsOnly: PropTypes.bool,
     show: PropTypes.number,
     view: PropTypes.func,
     isFilterable: PropTypes.bool,
@@ -43,7 +48,7 @@ export class FacetContainer extends Component {
     };
   }
 
-  handleClickMore = totalOptions => {
+  handleClickMore = (totalOptions) => {
     this.setState(({ more }) => {
       let visibleOptionsCount = more + 10;
       const showingAll = visibleOptionsCount >= totalOptions;
@@ -55,7 +60,7 @@ export class FacetContainer extends Component {
     });
   };
 
-  handleFacetSearch = searchTerm => {
+  handleFacetSearch = (searchTerm) => {
     this.setState({ searchTerm });
   };
 
@@ -75,6 +80,8 @@ export class FacetContainer extends Component {
       isFilterable,
       // eslint-disable-next-line no-unused-vars
       a11yNotify,
+      defaultOptions: rawDefaultOptions = [],
+      showDefaultOptionsOnly,
       ...rest
     } = this.props;
     const facetsForField = facets[field];
@@ -85,24 +92,77 @@ export class FacetContainer extends Component {
     // in future version, so instead of an array, there will only be one facet allowed per field.
     const facet = facetsForField[0];
 
-    let facetValues = markSelectedFacetValuesFromFilters(
-      facet,
-      filters,
-      field,
-      filterType
-    ).data;
+    let facetValuesMap = {};
+    let facetCountMap = {};
+    let selectedMap = {};
+    let defaultOptions = rawDefaultOptions;
+    let facetValues = [];
+    let selectedValues = [];
+    ["all", "any", "none"].forEach((filterType) => {
+      const facetValues = markSelectedFacetValuesFromFilters(
+        facet,
+        filters,
+        field,
+        filterType
+      ).data;
+      // fill out facetValuesMap
+      facetValuesMap[filterType] = facetValues;
+      // fill out selectedMap and facetCountMap
+      selectedMap[filterType] = {};
+      facetCountMap[filterType] = {};
+      facetValues.forEach((facetValue) => {
+        selectedMap[filterType][facetValue.value] = facetValue.selected;
+        facetCountMap[filterType][facetValue.value] = facetValue.count;
+      });
+    });
 
-    const selectedValues = facetValues
-      .filter(fv => fv.selected)
-      .map(fv => fv.value);
+    if (!showDefaultOptionsOnly) {
+      facetValues = facetValuesMap[filterType];
+      selectedValues = facetValues
+        .filter((fv) => fv.selected)
+        .map((fv) => fv.value);
+    }
 
-    if (!facetValues.length && !selectedValues.length) return null;
+    if (
+      !facetValues.length &&
+      !selectedValues.length &&
+      !rawDefaultOptions.length
+    ) {
+      return null;
+    }
 
     if (searchTerm.trim()) {
-      facetValues = facetValues.filter(option =>
+      facetValues = facetValues.filter((option) =>
         accentFold(option.value)
           .toLowerCase()
           .includes(accentFold(searchTerm).toLowerCase())
+      );
+      if (rawDefaultOptions.length > 0) {
+        defaultOptions = [];
+        rawDefaultOptions.forEach((section) => {
+          const sectionOptions = section.options.filter((option) =>
+            accentFold(option.value)
+              .toLowerCase()
+              .includes(accentFold(searchTerm).toLowerCase())
+          );
+          if (sectionOptions.length > 0) {
+            defaultOptions.push({
+              ...section,
+              options: sectionOptions
+            });
+          }
+        });
+      }
+    }
+
+    if (defaultOptions.length > 0) {
+      const defaultOptionsSet = new Set(
+        defaultOptions.flatMap((section) =>
+          section.options.map((option) => option.value)
+        )
+      );
+      facetValues = facetValues.filter(
+        (facetValue) => !defaultOptionsSet.has(facetValue.value)
       );
     }
 
@@ -111,24 +171,33 @@ export class FacetContainer extends Component {
     const viewProps = {
       className,
       label: label,
+      field,
       onMoreClick: this.handleClickMore.bind(this, facetValues.length),
-      onRemove: value => {
+      onRemove: (value) => {
         removeFilter(field, value, filterType);
       },
-      onChange: value => {
+      onChange: (value) => {
         setFilter(field, value, filterType);
       },
-      onSelect: value => {
+      onSelect: (value) => {
         addFilter(field, value, filterType);
       },
       options: facetValues.slice(0, more),
+      defaultOptions,
+      showDefaultOptionsOnly,
       showMore: facetValues.length > more,
       values: selectedValues,
       showSearch: isFilterable,
-      onSearch: value => {
+      onSearch: (value) => {
         this.handleFacetSearch(value);
       },
-      searchPlaceholder: `Filter ${field}`,
+      selectedMap,
+      facetCountMap,
+      searchTerm,
+      searchPlaceholder: `Filter ${label}`,
+      setFilter,
+      addFilter,
+      removeFilter,
       ...rest
     };
 
