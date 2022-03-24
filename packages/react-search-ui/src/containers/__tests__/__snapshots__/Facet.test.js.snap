@@ -22,7 +22,24 @@ exports[`renders correctly 1`] = `
       },
     ]
   }
-  searchPlaceholder="Filter field1"
+  searchPlaceholder="Filter Field 1"
+  searchTerm=""
+  selectedMap={
+    Object {
+      "all": Object {
+        "field1value1": true,
+        "field1value2": false,
+      },
+      "any": Object {
+        "field1value1": false,
+        "field1value2": false,
+      },
+      "none": Object {
+        "field1value1": false,
+        "field1value2": false,
+      },
+    }
+  }
   showMore={false}
   showSearch={false}
   values={
