@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@elastic/react-search-ui-views": "1.9.0",
-    "@elastic/search-ui": "1.9.0"
+    "@elastic/search-ui": "https://github.com/Tsquare/search-ui/raw/release/packages/search-ui/elastic-search-ui-1.9.0.tgz"
   },
   "peerDependencies": {
     "react": ">= 16.8.0 < 18",
