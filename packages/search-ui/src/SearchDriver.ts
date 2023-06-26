@@ -228,20 +228,7 @@ class SearchDriver {
     this.urlPushDebounceLength = urlPushDebounceLength;
     this.alwaysSearchOnInitialLoad = alwaysSearchOnInitialLoad;
     this.apiConnector = apiConnector;
-
-    let urlState;
-    if (trackUrlState) {
-      this.URLManager = new URLManager(routingOptions);
-      urlState = this.URLManager.getStateFromURL();
-      this.URLManager.onURLStateChange((urlState) => {
-        this._updateSearchResults(
-          { ...DEFAULT_STATE, ...urlState },
-          { skipPushToUrl: true }
-        );
-      });
-    } else {
-      urlState = {};
-    }
+    this.URLManager = new URLManager(routingOptions);
 
     // Manage screen reader accessible notifications
     this.hasA11yNotifications = hasA11yNotifications;
@@ -258,6 +245,9 @@ class SearchDriver {
       ...this.state,
       ...initialState
     };
+
+    // Get RequestState from the URL if trackUrlState config is enabled
+    const urlState = trackUrlState ? this.URLManager.getStateFromURL() : {};
 
     // We filter these here to disallow anything other than valid search
     // parameters to be passed in initial state, or url state. `results`, etc,
