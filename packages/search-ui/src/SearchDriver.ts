@@ -503,6 +503,9 @@ class SearchDriver {
             return;
           }
 
+          // Swallow error caused by an old request to prevent disruption of newer requests
+          // See https://github.com/elastic/search-ui/issues/981
+          if (this.searchRequestSequencer.isOldRequest(requestId)) return;
           this._setState({
             error: `An unexpected error occurred: ${error.message}`
           });
