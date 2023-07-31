@@ -1,5 +1,5 @@
 # Compile Sass to a temporary location
-node-sass src/ -o .temp/
+sass src/:.temp/
 
 # Process compiled SASS to inline imported CSS files and add vendor prefixes
 # Move it to /lib
