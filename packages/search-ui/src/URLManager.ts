@@ -249,5 +249,5 @@ export default class URLManager {
 
   tearDown = () => {
     this.unlisten?.();
-  }
+  };
 }
