@@ -175,7 +175,11 @@ export class BeaconFacetContainer extends Component<
     if (searchTermTrimmed) {
       // Filter down facetValues by searchTerm
       facetValues = facetValues.filter((facetValue: FacetValue) => {
-        if (optionLabelsMap) {
+        // Can only reference optionLabelsMap if
+        // optionLabelsMap is returning a string (as opposed to a ReactNode, which we support)
+        if (optionLabelsMap && (
+          typeof facetValue.value === 'string' || typeof facetValue.value === 'number'
+        )) {
           return isMatchedFacetValueAndSearchTerm(
             {
               ...facetValue,
