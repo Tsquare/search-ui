@@ -5,6 +5,7 @@ import type {
   FilterType,
   SearchContextState
 } from "@elastic/search-ui";
+import { ReactNode } from "react";
 
 export interface BaseContainerProps {
   children?: React.ReactNode;
@@ -119,7 +120,7 @@ export type BeaconFacetViewProps = FacetViewProps & {
   searchTerm: string;
   facetValuesMap: BeaconFacetValuesMapProps;
   otherOptionsSectionName?: string | undefined;
-  optionLabelsMap?: Record<string, string>;
+  optionLabelsMap?: Record<string, ReactNode>;
   addFilter: (
     field: string,
     value: FilterValue,
@@ -142,7 +143,7 @@ export type BeaconFacetContainerProps = Omit<FacetContainerProps, "view"> & {
   showDefaultOptionsOnly?: boolean;
   defaultOptions?: FacetDefaultOptionsProps[];
   otherOptionsSectionName?: string;
-  optionLabelsMap?: Record<string, string>;
+  optionLabelsMap?: Record<string, ReactNode>;
 };
 
 // BeaconFacetValuesMapProps is a nested hashmap of filterType -> field (string) -> stringified FacetValue (string) -> FacetValue.
