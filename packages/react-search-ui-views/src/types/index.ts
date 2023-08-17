@@ -119,6 +119,7 @@ export type BeaconFacetViewProps = FacetViewProps & {
   searchTerm: string;
   facetValuesMap: BeaconFacetValuesMapProps;
   otherOptionsSectionName?: string | undefined;
+  optionLabelsMap?: Record<string, string>;
   addFilter: (
     field: string,
     value: FilterValue,
@@ -141,6 +142,7 @@ export type BeaconFacetContainerProps = Omit<FacetContainerProps, "view"> & {
   showDefaultOptionsOnly?: boolean;
   defaultOptions?: FacetDefaultOptionsProps[];
   otherOptionsSectionName?: string;
+  optionLabelsMap?: Record<string, string>;
 };
 
 // BeaconFacetValuesMapProps is a nested hashmap of filterType -> field (string) -> stringified FacetValue (string) -> FacetValue.
