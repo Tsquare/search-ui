@@ -19,7 +19,7 @@ export default function setFilter(
   // eslint-disable-next-line no-console
   if (this.debug) console.log("Search UI: Action", "setFilter", ...arguments);
 
-  let { filters = [] } = this.state as RequestState;
+  let { filters } = this.state as RequestState;
   filters = filters.filter(
     (filter) => filter.field !== name || filter.type !== type
   );
@@ -41,7 +41,7 @@ export default function setFilter(
   events.emit({
     type: "FacetFilterSelected",
     field: name,
-    value: (value && serialiseFilter([value])) as any,
+    value: value && serialiseFilter([value]),
     query: this.state.searchTerm
   });
 }

@@ -9,7 +9,6 @@ import { mergeFilters } from "./helpers";
 import {
   AutocompleteResponseState,
   AutocompleteSearchQuery,
-  Filter,
   INVALID_CREDENTIALS,
   Plugin,
   QueryConfig,
@@ -78,7 +77,7 @@ export const DEFAULT_STATE: SearchState = {
 function removeConditionalFacets(
   facets = {},
   conditionalFacets = {},
-  filters: Filter[] | undefined = []
+  filters = []
 ) {
   return Object.entries(facets).reduce((acc, [facetKey, facet]) => {
     if (
@@ -172,7 +171,7 @@ class SearchDriver {
     apiConnector,
     autocompleteQuery = {},
     plugins = [],
-    debug = false,
+    debug,
     initialState,
     onSearch,
     onAutocomplete,
@@ -273,7 +272,7 @@ class SearchDriver {
     // Otherwise, we'll just save their selections in state as initial values.
     if (
       searchParameters.searchTerm ||
-      (searchParameters.filters?.length ?? 0) > 0 ||
+      searchParameters.filters.length > 0 ||
       this.alwaysSearchOnInitialLoad
     ) {
       this._updateSearchResults(searchParameters, { replaceUrl: true });
@@ -425,7 +424,7 @@ class SearchDriver {
         facets: removeConditionalFacets(
           this.searchQuery.facets,
           conditionalFacets,
-          filters as unknown as Filter[] | undefined
+          filters
         )
       };
 
@@ -442,8 +441,8 @@ class SearchDriver {
 
           this.events.emit({
             type: "SearchQuery",
-            filters: this.state.filters!,
-            query: this.state.searchTerm as string,
+            filters: this.state.filters,
+            query: this.state.searchTerm,
             currentPage: requestState.current,
             resultsPerPage: requestState.resultsPerPage,
             totalResults: totalResults
@@ -451,20 +450,18 @@ class SearchDriver {
 
           // Results paging start & end
           const start =
-            totalResults === 0 ? 0 : (current! - 1) * resultsPerPage! + 1;
+            totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1;
           const end =
-            totalResults < start + resultsPerPage!
+            totalResults < start + resultsPerPage
               ? totalResults
-              : start + resultsPerPage! - 1;
+              : start + resultsPerPage - 1;
 
           this._setState({
             isLoading: false,
             resultSearchTerm: searchTerm,
             pagingStart: start,
             pagingEnd: end,
-            // This overwrites prior terms :/
-            // So to suppress TS error cast as any
-            ...(resultState as any),
+            ...resultState,
             wasSearched: true
           });
 

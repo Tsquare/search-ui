@@ -5,8 +5,8 @@ function getNewClassName(newClassName: string | string[]) {
 }
 
 export default function appendClassName(
-  baseClassName?: string | string[] | undefined | null,
-  newClassName?: string | string[] | undefined | null
+  baseClassName?: string | string[] | undefined,
+  newClassName?: string | string[] | undefined
 ): string {
   if (!newClassName)
     return (

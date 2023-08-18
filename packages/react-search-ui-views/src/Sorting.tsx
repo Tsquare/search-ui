@@ -59,7 +59,7 @@ function Sorting({
         className="sui-select"
         classNamePrefix="sui-select"
         value={selectedOption}
-        onChange={(o) => o !== null && onChange(o.value)}
+        onChange={(o) => onChange(o.value)}
         options={options}
         isSearchable={false}
         styles={setDefaultStyle}

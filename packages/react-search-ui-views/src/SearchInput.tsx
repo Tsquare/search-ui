@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 export type InputViewProps = {
-  getAutocomplete: () => ReactNode;
+  getAutocomplete: () => JSX.Element;
   getButtonProps: (additionalProps?: any) => any;
   getInputProps: (additionalProps?: any) => any;
 };

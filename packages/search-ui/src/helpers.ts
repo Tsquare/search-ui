@@ -14,9 +14,7 @@ export function findFilterValues(
   name: string,
   filterType: FilterType
 ): FilterValue[] {
-  const filter = filters?.find(
-    (f) => f.field === name && f.type === filterType
-  );
+  const filter = filters.find((f) => f.field === name && f.type === filterType);
   if (!filter) return [];
   return filter.values;
 }
@@ -34,7 +32,7 @@ export function removeSingleFilterValue(
   filters: Filter[],
   fieldName: string,
   value: FilterValue,
-  filterType: FilterType | undefined
+  filterType: FilterType
 ): Filter[] {
   return filters.reduce((acc, filter) => {
     const { field, values, type, ...rest } = filter;
@@ -43,7 +41,7 @@ export function removeSingleFilterValue(
         (filterValue) => !doFilterValuesMatch(filterValue, value)
       );
       if (updatedFilterValues.length > 0) {
-        return (acc as any[]).concat({
+        return acc.concat({
           field,
           values: updatedFilterValues,
           type,
@@ -53,7 +51,7 @@ export function removeSingleFilterValue(
         return acc;
       }
     }
-    return acc.concat(filter as any);
+    return acc.concat(filter);
   }, []);
 }
 
