@@ -69,7 +69,7 @@ function SingleSelectFacet({
           }
         }}
         value={selectedSelectBoxOption}
-        onChange={(o) => onChange(o.value)}
+        onChange={(o) => o !== null && onChange(o.value)}
         options={selectBoxOptions}
         isSearchable={false}
         styles={setDefaultStyle}

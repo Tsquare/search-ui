@@ -26,7 +26,7 @@ export type PagingContainerProps = BaseContainerProps &
 function Paging({
   className,
   current,
-  resultsPerPage,
+  resultsPerPage = 0,
   onChange,
   totalPages,
   ...rest
