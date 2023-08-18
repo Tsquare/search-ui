@@ -14,7 +14,7 @@ export default function setSort(
   // eslint-disable-next-line no-console
   if (this.debug) console.log("Search UI: Action", "setSort", ...arguments);
 
-  const update = {
+  const update: Record<string, any> = {
     current: 1,
     sortList: null,
     sortField: null,

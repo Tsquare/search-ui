@@ -24,20 +24,24 @@ function toSingleValue(val): string {
   return Array.isArray(val) ? val[val.length - 1] : val;
 }
 
-function toSingleValueInteger(num): number {
+function toSingleValueInteger(num): number | undefined {
   return toInteger(toSingleValue(num));
 }
 
-function toInteger(num): number {
+function toInteger(num): number | undefined {
   if (!isNumericString(num)) return;
   return parseInt(num, 10);
 }
 
-function parseFiltersFromQueryParams(queryParams: QueryParams): Filter[] {
+function parseFiltersFromQueryParams(
+  queryParams: QueryParams
+): Filter[] | undefined {
   return queryParams.filters;
 }
 
-function parseCurrentFromQueryParams(queryParams: QueryParams): number {
+function parseCurrentFromQueryParams(
+  queryParams: QueryParams
+): number | undefined {
   return toSingleValueInteger(queryParams.current);
 }
 
@@ -55,12 +59,14 @@ function parseOldSortFromQueryParams(
   return [];
 }
 
-function parseSizeFromQueryParams(queryParams: QueryParams): number {
+function parseSizeFromQueryParams(
+  queryParams: QueryParams
+): number | undefined {
   return toSingleValueInteger(queryParams.size);
 }
 
 function parseSortFromQueryParams(queryParams: QueryParams): SortOption[] {
-  return queryParams["sort"];
+  return queryParams["sort"]!;
 }
 
 function paramsToState(queryParams: QueryParams): RequestState {
@@ -91,7 +97,7 @@ function stateToParams({
   sortList
 }: RequestState): QueryParams {
   const params: QueryParams = {};
-  if (current > 1) params.current = current;
+  if (current! > 1) params.current = current!;
   if (searchTerm) params.q = searchTerm;
   if (resultsPerPage) params.size = resultsPerPage;
   if (filters && filters.length > 0) {

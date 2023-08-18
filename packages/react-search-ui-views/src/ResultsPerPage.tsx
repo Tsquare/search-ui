@@ -53,12 +53,13 @@ function ResultsPerPage({
   value: selectedValue,
   ...rest
 }: ResultsPerPageViewProps) {
-  let selectedOption = null;
-
+  const selectedOption = selectedValue ? wrapOption(selectedValue) : null;
   if (selectedValue) {
-    selectedOption = wrapOption(selectedValue);
-
-    if (!options.includes(selectedValue)) options = [selectedValue, ...options];
+    if (!options) {
+      options = [selectedValue];
+    } else if (!options.includes(selectedValue)) {
+      options = [selectedValue, ...options];
+    }
   }
 
   return (
@@ -71,8 +72,8 @@ function ResultsPerPage({
         className="sui-select sui-select--inline"
         classNamePrefix="sui-select"
         value={selectedOption}
-        onChange={(o) => onChange(o.value)}
-        options={options.map(wrapOption)}
+        onChange={(o) => o !== null && onChange(o.value)}
+        options={options?.map(wrapOption)}
         isSearchable={false}
         styles={setDefaultStyle}
         components={{
