@@ -20,7 +20,7 @@ export default function removeFilter(
     // eslint-disable-next-line no-console
     console.log("Search UI: Action", "removeFilter", ...arguments);
 
-  const { filters } = this.state as RequestState;
+  const { filters = [] } = this.state as RequestState;
 
   let updatedFilters = filters;
 
@@ -44,7 +44,7 @@ export default function removeFilter(
   events.emit({
     type: "FacetFilterRemoved",
     field: name,
-    value: value && serialiseFilter([value]),
+    value: (value && serialiseFilter([value])) as any,
     query: this.state.searchTerm
   });
 }

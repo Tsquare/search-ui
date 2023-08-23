@@ -36,7 +36,7 @@ function getSuggestionTitle(suggestionType, autocompleteSuggestions) {
 function getSuggestionDisplayField(
   suggestionType: string,
   autocompleteSuggestions: AutocompleteSuggestion
-): string {
+): string | undefined {
   if (autocompleteSuggestions.queryType === "results") {
     return autocompleteSuggestions.displayField as string;
   }
@@ -55,12 +55,12 @@ export type SearchBoxAutocompleteViewProps = {
   autocompletedSuggestions: AutocompletedSuggestions;
   autocompletedSuggestionsCount: number;
   autocompleteSuggestions?: boolean | AutocompleteSuggestion;
-  getItemProps: ({
-    key: string,
-    index: number,
-    item: AutocompletedSuggestion
+  getItemProps: (p: {
+    key?: string;
+    index: number;
+    item: AutocompletedSuggestion;
   }) => any;
-  getMenuProps: ({ className: string }) => any;
+  getMenuProps: (p: { className: string }) => any;
   className?: string;
 };
 
@@ -111,25 +111,27 @@ function Autocomplete({
                         ) => {
                           index++;
                           if (suggestion.queryType === "results") {
-                            let displayField = null;
+                            let displayField: string | null = null;
                             if (autocompleteSuggestions === true) {
                               displayField = Object.keys(suggestion.result)[0];
                             } else {
-                              displayField = getSuggestionDisplayField(
-                                suggestionType,
-                                autocompleteSuggestions
-                              );
+                              displayField =
+                                getSuggestionDisplayField(
+                                  suggestionType,
+                                  autocompleteSuggestions
+                                ) ?? null;
                             }
-                            const suggestionValue =
-                              suggestion.result[displayField]?.raw;
+                            const suggestionValue = displayField
+                              ? suggestion.result[displayField]?.raw
+                              : undefined;
 
                             return (
                               <li
                                 {...getItemProps({
-                                  key: suggestionValue,
+                                  key: suggestionValue?.toString(),
                                   index: index - 1,
                                   item: {
-                                    suggestion: suggestionValue
+                                    suggestion: suggestionValue?.toString()
                                   }
                                 })}
                                 data-transaction-name="query suggestion"
@@ -148,7 +150,7 @@ function Autocomplete({
                                 item: {
                                   ...suggestion,
                                   index: index - 1
-                                }
+                                } as any
                               })}
                               data-transaction-name="query suggestion"
                             >

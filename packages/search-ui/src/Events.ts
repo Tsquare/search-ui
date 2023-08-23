@@ -82,20 +82,20 @@ class Events {
     onAutocompleteResultClick,
     plugins = []
   }: EventOptions = {}) {
-    this.search = wireUpEventHandler("onSearch", apiConnector, onSearch);
+    this.search = wireUpEventHandler("onSearch", apiConnector!, onSearch);
     this.autocomplete = wireUpEventHandler(
       "onAutocomplete",
-      apiConnector,
+      apiConnector!,
       onAutocomplete
     );
     this.resultClick = wireUpEventHandler(
       "onResultClick",
-      apiConnector,
+      apiConnector!,
       onResultClick
     );
     this.autocompleteResultClick = wireUpEventHandler(
       "onAutocompleteResultClick",
-      apiConnector,
+      apiConnector!,
       onAutocompleteResultClick
     );
     this.plugins = plugins;

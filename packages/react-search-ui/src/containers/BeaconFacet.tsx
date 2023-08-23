@@ -116,6 +116,7 @@ export class BeaconFacetContainer extends Component<
       a11yNotify,
       defaultOptions: rawDefaultOptions,
       showDefaultOptionsOnly,
+      optionLabelsMap,
       ...rest
     } = this.props;
     const facetsForField = facets[field];
@@ -173,9 +174,24 @@ export class BeaconFacetContainer extends Component<
     const searchTermTrimmed = searchTerm.trim();
     if (searchTermTrimmed) {
       // Filter down facetValues by searchTerm
-      facetValues = facetValues.filter((facetValue: FacetValue) =>
-        isMatchedFacetValueAndSearchTerm(facetValue, searchTermTrimmed)
-      );
+      facetValues = facetValues.filter((facetValue: FacetValue) => {
+        if (optionLabelsMap) {
+          const optionLabel = optionLabelsMap[facetValue.value.toString()];
+          // Can only reference optionLabelsMap if
+          // optionLabelsMap is returning a string (as opposed to a ReactNode, which we support)
+          // Otherwise we can't text match against it
+          if (optionLabel !== undefined && typeof optionLabel === 'string' || typeof optionLabel === 'number') {
+            return isMatchedFacetValueAndSearchTerm(
+              {
+                ...facetValue,
+                value: optionLabel.toString()
+              },
+              searchTermTrimmed
+            );
+          }
+        }
+        return isMatchedFacetValueAndSearchTerm(facetValue, searchTermTrimmed);
+      });
 
       // Filter down defaultOptions by searchTerm
       if (defaultOptions && defaultOptions.length) {
@@ -234,6 +250,7 @@ export class BeaconFacetContainer extends Component<
       values: selectedValues,
       showSearch: isFilterable,
       onSearch: (value) => {
+        // this method / handleFacetSearch
         this.handleFacetSearch(value);
       },
       searchPlaceholder: `Filter ${label}`,
@@ -244,6 +261,7 @@ export class BeaconFacetContainer extends Component<
       defaultOptions,
       showDefaultOptionsOnly,
       facetValuesMap,
+      optionLabelsMap,
       ...rest
     };
 

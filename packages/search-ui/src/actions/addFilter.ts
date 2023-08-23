@@ -22,9 +22,9 @@ export default function addFilter(
   const { filters } = this.state as RequestState;
 
   const existingFilter =
-    filters.find((f) => f.field === name && f.type === type) || null;
+    filters?.find((f) => f.field === name && f.type === type) || null;
   const allOtherFilters =
-    filters.filter((f) => f.field !== name || f.type !== type) || [];
+    filters?.filter((f) => f.field !== name || f.type !== type) || [];
   const existingFilterValues = existingFilter?.values || [];
 
   const newFilterValues = existingFilterValues.find((existing) =>

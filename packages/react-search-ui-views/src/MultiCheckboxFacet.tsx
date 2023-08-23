@@ -4,18 +4,20 @@ import { appendClassName, getFilterValueDisplay } from "./view-helpers";
 import { FacetViewProps } from "./types";
 import type { FieldValue } from "@elastic/search-ui";
 
-function MultiCheckboxFacet({
-  className,
-  label,
-  onMoreClick,
-  onRemove,
-  onSelect,
-  options,
-  showMore,
-  showSearch,
-  onSearch,
-  searchPlaceholder
-}: FacetViewProps) {
+function MultiCheckboxFacet(props: FacetViewProps) {
+  const {
+    className,
+    label,
+    onMoreClick,
+    onRemove,
+    onSelect,
+    options,
+    showMore,
+    showSearch,
+    onSearch,
+    searchPlaceholder
+  } = props;
+
   return (
     <fieldset className={appendClassName("sui-facet", className)}>
       <legend className="sui-facet__title">{label}</legend>
@@ -60,10 +62,10 @@ function MultiCheckboxFacet({
                 <span className="sui-multi-checkbox-facet__input-text">
                   {getFilterValueDisplay(option.value)}
                 </span>
+                <span className="sui-multi-checkbox-facet__option-count">
+                  {option.count.toLocaleString("en")}
+                </span>
               </div>
-              <span className="sui-multi-checkbox-facet__option-count">
-                {option.count.toLocaleString("en")}
-              </span>
             </label>
           );
         })}
