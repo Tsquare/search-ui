@@ -24,7 +24,7 @@ const SearchProvider = ({
   children,
   config,
   driver
-}: SearchProviderProps): JSX.Element => {
+}: SearchProviderProps): JSX.Element | null => {
   const [driverInstance, setDriverInstance] = useState<SearchDriver | null>(null);
 
   useEffect(() => {
