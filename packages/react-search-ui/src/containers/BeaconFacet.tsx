@@ -138,7 +138,7 @@ export class BeaconFacetContainer extends Component<
     [filterType, "none"].forEach((_filterType) => {
       const facetValues = markSelectedFacetValuesFromFilters(
         facet,
-        filters,
+        filters ?? [],
         field,
         _filterType
       ).data;
@@ -180,7 +180,10 @@ export class BeaconFacetContainer extends Component<
           // Can only reference optionLabelsMap if
           // optionLabelsMap is returning a string (as opposed to a ReactNode, which we support)
           // Otherwise we can't text match against it
-          if (optionLabel !== undefined && typeof optionLabel === 'string' || typeof optionLabel === 'number') {
+          if (
+            (optionLabel !== undefined && typeof optionLabel === "string") ||
+            typeof optionLabel === "number"
+          ) {
             return isMatchedFacetValueAndSearchTerm(
               {
                 ...facetValue,
@@ -195,7 +198,8 @@ export class BeaconFacetContainer extends Component<
 
       // Filter down defaultOptions by searchTerm
       if (defaultOptions && defaultOptions.length) {
-        const filteredDefaultOptions = [];
+        // Cursed types everywhere
+        const filteredDefaultOptions: any[] = [];
         defaultOptions.forEach((section) => {
           const sectionOptions = section.options.filter((option) =>
             isMatchedDefaultOptionAndSearchTerm(option, searchTerm)
@@ -245,10 +249,10 @@ export class BeaconFacetContainer extends Component<
       onSelect: (value) => {
         addFilter(field, value, filterType);
       },
-      options: facetValues.slice(0, more),
+      options: ((facetValues ?? []) as FacetValue[]).slice(0, more),
       showMore: facetValues.length > more,
       values: selectedValues,
-      showSearch: isFilterable,
+      showSearch: !!isFilterable,
       onSearch: (value) => {
         // this method / handleFacetSearch
         this.handleFacetSearch(value);

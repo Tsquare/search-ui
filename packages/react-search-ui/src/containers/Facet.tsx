@@ -80,7 +80,7 @@ export class FacetContainer extends Component<
 
     let facetValues = markSelectedFacetValuesFromFilters(
       facet,
-      filters,
+      filters ?? [],
       field,
       filterType
     ).data;
@@ -135,7 +135,7 @@ export class FacetContainer extends Component<
       options: facetValues.slice(0, more),
       showMore: facetValues.length > more,
       values: selectedValues,
-      showSearch: isFilterable,
+      showSearch: !!isFilterable,
       onSearch: (value) => {
         this.handleFacetSearch(value);
       },

@@ -77,12 +77,12 @@ function withSearch<TProps, TContext>(
         // Note that we subscribe to changes at the component level, rather than
         // at the top level Provider, so that we are re-rendering the entire
         // subtree when state changes in the Provider.
-        this.context.driver.subscribeToStateChanges(this.subscription);
+        this.context?.driver.subscribeToStateChanges(this.subscription);
       }
 
       componentWillUnmount() {
         this.mounted = false;
-        this.context.driver.unsubscribeToStateChanges(this.subscription);
+        this.context?.driver.unsubscribeToStateChanges(this.subscription);
       }
 
       subscription = (state) => {
