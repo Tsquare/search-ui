@@ -24,8 +24,8 @@ const SearchProvider = ({
   children,
   config,
   driver
-}: SearchProviderProps): JSX.Element => {
-  const [driverInstance, setDriverInstance] = useState<SearchDriver>(null);
+}: SearchProviderProps): React.ReactNode => {
+  const [driverInstance, setDriverInstance] = useState<SearchDriver | null>(null);
 
   useEffect(() => {
     // This initialization is done inside of useEffect, because initializing the SearchDriver server side
@@ -50,13 +50,13 @@ const SearchProvider = ({
   // This effect allows users to dynamically update their searchQuery without re-mounting a SearchProvider,
   // which would be destructive. An example of why this is useful is dynamically updating facets.
   useEffect(() => {
-    if (driverInstance) {
+    if (driverInstance && config.searchQuery) {
       driverInstance.setSearchQuery(config.searchQuery);
     }
   }, [config.searchQuery]);
 
   useEffect(() => {
-    if (driverInstance) {
+    if (driverInstance && config.autocompleteQuery) {
       driverInstance.setAutocompleteQuery(config.autocompleteQuery);
     }
   }, [config.autocompleteQuery]);
@@ -68,7 +68,7 @@ const SearchProvider = ({
   // See the filed issue for more details:
   // https://github.com/elastic/search-ui/issues/606
   useEffect(() => {
-    if (driverInstance) {
+    if (driverInstance && config.trackUrlState) {
       driverInstance.setTrackUrlState(config.trackUrlState);
     }
   }, [config.trackUrlState]);
