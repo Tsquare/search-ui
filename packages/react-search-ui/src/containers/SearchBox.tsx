@@ -31,7 +31,9 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
 
   completeSuggestion = (searchTerm) => {
     const { shouldClearFilters, setSearchTerm } = this.props;
-    setSearchTerm(searchTerm, {
+    
+    // Cursed typing throughout whole repo
+    setSearchTerm(searchTerm as string, {
       shouldClearFilters
     });
   };
@@ -40,7 +42,9 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
     const { shouldClearFilters, searchTerm, setSearchTerm } = this.props;
 
     e.preventDefault();
-    setSearchTerm(searchTerm, {
+    
+    // Cursed typing throughout whole repo
+    setSearchTerm(searchTerm as string, {
       shouldClearFilters
     });
   };
@@ -112,13 +116,13 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
 
     this.handleNotifyAutocompleteSelected(selection);
     if (!selection.suggestion && typeof autocompleteResults !== "boolean") {
-      const url = selection[autocompleteResults.urlField]
+      const url = autocompleteResults && selection[autocompleteResults.urlField]
         ? selection[autocompleteResults.urlField].raw
         : "";
       if (url) {
         const target =
           (typeof autocompleteResults !== "boolean" &&
-            autocompleteResults.linkTarget) ||
+            autocompleteResults?.linkTarget) ||
           "_self";
         window.open(url, target);
       }
@@ -149,7 +153,7 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
     const View = view || SearchBox;
     const useAutocomplete =
       (!!autocompleteResults || !!autocompleteSuggestions) &&
-      searchTerm.length >= autocompleteMinimumCharacters;
+      (searchTerm?.length ?? 0) >= (autocompleteMinimumCharacters ?? 1);
     const autocompletedSuggestionsCount = Object.entries(
       autocompletedSuggestions
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -190,7 +194,8 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
       onSubmit: onSubmit
         ? (e) => {
             e.preventDefault();
-            onSubmit(searchTerm);
+            // Cursed typing throughout whole repo
+            onSubmit(searchTerm as string);
           }
         : this.handleSubmit,
       useAutocomplete: useAutocomplete,
@@ -204,7 +209,8 @@ export class SearchBoxContainer extends Component<SearchBoxContainerProps> {
       ...rest
     };
 
-    return <View {...viewProps} />;
+    // Cursed typing throughout whole repo
+    return <View {...(viewProps as any)} />;
   }
 }
 

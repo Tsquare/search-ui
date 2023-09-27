@@ -138,12 +138,13 @@ export type BeaconFacetViewProps = FacetViewProps & {
   ) => void;
 };
 
-export type BeaconFacetContainerProps = Omit<FacetContainerProps, "view"> & {
+export type BeaconFacetContainerProps = Omit<FacetContainerProps, "view" | "filterType"> & {
   view?: React.ComponentType<BeaconFacetViewProps>;
   showDefaultOptionsOnly?: boolean;
   defaultOptions?: FacetDefaultOptionsProps[];
   otherOptionsSectionName?: string;
   optionLabelsMap?: Record<string, ReactNode>;
+  filterType: FilterType;
 };
 
 // BeaconFacetValuesMapProps is a nested hashmap of filterType -> field (string) -> stringified FacetValue (string) -> FacetValue.
