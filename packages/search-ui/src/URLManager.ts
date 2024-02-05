@@ -113,7 +113,17 @@ function stateToParams({
 }
 
 function stateToQueryString(state: RequestState): string {
-  return queryString.stringify(stateToParams(state));
+  const rawParams: Record<string, any> = stateToParams(state);
+
+  const queryParams = new URLSearchParams(window.location.search);
+
+  [...queryParams.entries()].forEach(([key, value]) => {
+    if (key.startsWith("_")) {
+      rawParams[key] = value;
+    }
+  });
+
+  return queryString.stringify(rawParams);
 }
 
 /**
