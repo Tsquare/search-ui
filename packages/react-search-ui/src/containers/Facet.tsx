@@ -10,6 +10,7 @@ import { helpers } from "@elastic/search-ui";
 
 import { accentFold } from "../helpers";
 import { withSearch } from "..";
+import _ from "lodash";
 
 const { markSelectedFacetValuesFromFilters } = helpers;
 
@@ -18,8 +19,12 @@ type FacetContainerState = {
   more: number;
 };
 
+interface IExtraFacetProps {
+  filterEmptyFacets?: boolean;
+}
+
 export class FacetContainer extends Component<
-  FacetContainerProps,
+  FacetContainerProps & IExtraFacetProps,
   FacetContainerState
 > {
   static defaultProps = {
@@ -68,6 +73,7 @@ export class FacetContainer extends Component<
       isFilterable,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       a11yNotify,
+      filterEmptyFacets,
       ...rest
     } = this.props;
     const facetsForField = facets[field];
@@ -114,6 +120,11 @@ export class FacetContainer extends Component<
         }
         return valueToSearch.includes(accentFold(searchTerm).toLowerCase());
       });
+    }
+    if (filterEmptyFacets) {
+      facetValues = facetValues.filter((option) =>
+        _.isString(option.value) ? option.value !== "" : true
+      );
     }
 
     const View: React.ComponentType<FacetViewProps> =
