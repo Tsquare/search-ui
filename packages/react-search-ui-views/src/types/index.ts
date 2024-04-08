@@ -98,6 +98,7 @@ export type FacetContainerProps = BaseContainerProps & {
   isFilterable?: boolean;
   field: string;
   label: string;
+  filterEmptyFacets?: boolean;
 } & FacetContainerContext;
 
 export type FacetDefaultOptionProps =

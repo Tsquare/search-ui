@@ -19,12 +19,9 @@ type FacetContainerState = {
   more: number;
 };
 
-interface IExtraFacetProps {
-  filterEmptyFacets?: boolean;
-}
 
 export class FacetContainer extends Component<
-  FacetContainerProps & IExtraFacetProps,
+  FacetContainerProps,
   FacetContainerState
 > {
   static defaultProps = {
