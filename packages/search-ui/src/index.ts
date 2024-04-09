@@ -7,5 +7,9 @@ export const helpers = {
 };
 export * from "./constants";
 export * from "./types";
+
+import URLManager from "./URLManager";
+export { URLManager };
+
 export type { SearchDriverActions } from "./actions";
 // export type { Event } from "./Events";
